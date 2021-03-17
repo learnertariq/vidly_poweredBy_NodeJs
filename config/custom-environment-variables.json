@@ -1,0 +1,6 @@
+{
+  "name": "development config",
+  "host": {
+    "password": "app_password_dev"
+  }
+}
