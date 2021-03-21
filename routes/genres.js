@@ -4,17 +4,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const router = express.Router();
 
-mongoose.connect("mongodb://localhost:27017/genre_exercises", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
 const genreSchema = new Schema({
   id: Number,
   name: {
     type: String,
     enum: ["Action", "Horror", "Tragedy", "Comedy"],
     minlength: 3,
+    required: true,
   },
 });
 
