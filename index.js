@@ -8,8 +8,9 @@ const config = require("config");
 const express = require("express");
 //Routers Path
 const home = require("./routes/home");
-const genre = require("./routes/genres");
-const customer = require("./routes/customers");
+const genres = require("./routes/genres");
+const customers = require("./routes/customers");
+const movies = require("./routes/movies");
 //Middlewares Path
 const log = require("./middleWares/logger");
 
@@ -47,8 +48,9 @@ if (app.get("env") === "development") {
 
 //Routers
 app.use("/", home);
-app.use("/api/genres", genre);
-app.use("/api/customers", customer);
+app.use("/api/genres", genres);
+app.use("/api/customers", customers);
+app.use("/api/movies", movies);
 
 //PORT Listener
 const port = process.env.PORT || 3000;
