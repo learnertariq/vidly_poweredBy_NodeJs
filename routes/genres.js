@@ -1,23 +1,9 @@
-const express = require("express");
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const router = express.Router();
+const router = require("express").Router();
+const { Genre, validate } = require('../models/genre');
 
-const genreSchema = new Schema({
-  id: Number,
-  name: {
-    type: String,
-    enum: ["Action", "Horror", "Tragedy", "Comedy"],
-    minlength: 3,
-    required: true,
-  },
-});
-
-const Genre = mongoose.model("Genre", genreSchema);
-
-router.get("/", (req, res) => {
-  res.send("Hello World");
+router.get("/", async (req, res) => {
+  const genres = await Genre.find();
+  res.send(genres);
 });
 
 router.get("/:id", (req, res) => {
@@ -30,9 +16,8 @@ router.get("/:id", (req, res) => {
   getGenre();
 });
 
-/////// Post
 router.post("/", (req, res) => {
-  const { error } = validateGenre(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(404).send(`${error.details[0].message}`);
 
   async function createGenre() {
@@ -49,9 +34,8 @@ router.post("/", (req, res) => {
   createGenre();
 });
 
-/////////////// Put
 router.put("/:id", (req, res) => {
-  const { error } = validateGenre(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(404).send(`${error.details[0].message}`);
 
   async function updateGenre() {
@@ -72,7 +56,6 @@ router.put("/:id", (req, res) => {
   updateGenre();
 });
 
-//////////// Delete
 router.delete("/:id", (req, res) => {
   async function removeGenre() {
     const genre = await Genre.findOneAndDelete({ id: parseInt(req.params.id) });
@@ -81,13 +64,5 @@ router.delete("/:id", (req, res) => {
   }
   removeGenre();
 });
-
-//////////// Joi validator
-function validateGenre(genre) {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-  return schema.validate(genre);
-}
 
 module.exports = router;
