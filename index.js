@@ -11,6 +11,7 @@ const home = require("./routes/home");
 const genres = require("./routes/genres");
 const customers = require("./routes/customers");
 const movies = require("./routes/movies");
+const rentals = require("./routes/rentals");
 //Middlewares Path
 const log = require("./middleWares/logger");
 
@@ -51,6 +52,7 @@ app.use("/", home);
 app.use("/api/genres", genres);
 app.use("/api/customers", customers);
 app.use("/api/movies", movies);
+app.use("/api/rentals", rentals);
 
 //PORT Listener
 const port = process.env.PORT || 3000;

@@ -3,7 +3,7 @@ const { Movie, validate } = require("../models/movie");
 const { Genre } = require("../models/genre");
 
 router.get("/", async (req, res) => {
-  const movies = await Movie.find().populate("genre");
+  const movies = await Movie.find();
   res.send(movies);
 });
 
