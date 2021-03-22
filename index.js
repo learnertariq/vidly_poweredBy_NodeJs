@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const config = require("config");
 const express = require("express");
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 //Routers Path
 const home = require("./routes/home");
 const genres = require("./routes/genres");

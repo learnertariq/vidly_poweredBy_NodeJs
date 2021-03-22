@@ -23,7 +23,6 @@ router.post("/", async (req, res) => {
   if (!movie) return res.status(404).send("Invalid Movie");
 
   if (movie.numberInStock <= 0) return res.status(404).send("Movie not found");
-  console.log(movie.numberInStock);
 
   let rental = await new Rental({
     customer: {
