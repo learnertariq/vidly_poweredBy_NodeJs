@@ -2,20 +2,17 @@ const router = require("express").Router();
 const { Genre, validate } = require("../models/genre");
 const auth = require("../middleWares/auth");
 const admin = require("../middleWares/admin");
+// const asyncMiddleWare = require("../middleWares/async");
 
 router.get("/", async (req, res) => {
   const genres = await Genre.find();
   res.send(genres);
 });
 
-router.get("/:id", (req, res) => {
-  async function getGenre() {
-    const genre = await Genre.findOne({ id: parseInt(req.params.id) });
-    if (!genre) return res.status(404).send("404 not found");
-    res.send(genre);
-  }
-
-  getGenre();
+router.get("/:id", async (req, res) => {
+  const genre = await Genre.findOne({ id: parseInt(req.params.id) });
+  if (!genre) return res.status(404).send("404 not found");
+  res.send(genre);
 });
 
 router.post("/", auth, async (req, res) => {
