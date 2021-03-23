@@ -1,5 +1,6 @@
 {
   "name": "production config",
   "host": {
+    "password": ""
   }
 }

@@ -1,5 +1,7 @@
 const router = require("express").Router();
-const { Genre, validate } = require('../models/genre');
+const { Genre, validate } = require("../models/genre");
+const auth = require("../middleWares/auth");
+const admin = require("../middleWares/admin");
 
 router.get("/", async (req, res) => {
   const genres = await Genre.find();
@@ -16,25 +18,23 @@ router.get("/:id", (req, res) => {
   getGenre();
 });
 
-router.post("/", (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(404).send(`${error.details[0].message}`);
 
-  async function createGenre() {
-    const genres = await Genre.find();
-    const genre = await new Genre({
-      id: genres.length + 1,
-      name: req.body.name,
-    });
+  console.log(req.user);
 
-    const result = await genre.save();
-    res.send(result);
-  }
+  const genres = await Genre.find();
+  const genre = await new Genre({
+    id: genres.length + 1,
+    name: req.body.name,
+  });
 
-  createGenre();
+  const result = await genre.save();
+  res.send(result);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", auth, (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(404).send(`${error.details[0].message}`);
 
@@ -56,7 +56,7 @@ router.put("/:id", (req, res) => {
   updateGenre();
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", [auth, admin], (req, res) => {
   async function removeGenre() {
     const genre = await Genre.findOneAndDelete({ id: parseInt(req.params.id) });
     if (!genre) return res.status(404).send("404 not found");
