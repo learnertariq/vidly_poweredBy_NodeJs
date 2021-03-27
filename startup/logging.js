@@ -4,33 +4,27 @@ const morgan = require("morgan");
 const winston = require("winston");
 require("winston-mongodb");
 require("express-async-errors");
+const config = require("config");
 
 module.exports = function (app) {
-  // handling uncaught exceptions
-  // process.on("uncaughtException", (ex) => {
-  //   winston.error(ex.message, { metadata: ex.stack });
-  //   process.exit(1);
-  // });
-
+  const database = config.get("db");
   winston.exceptions.handle(
     new winston.transports.File({ filename: "uncaughtExceptions.log" }),
-    // new winston.transports.MongoDB({
-    //   db: "mongodb://localhost:27017/genre_exercises",
-    //   level: "info",
-    // })
+    new winston.transports.MongoDB({
+      db: database,
+      level: "info",
+    })
   );
 
   process.on("unhandledRejection", (ex) => {
-    // winston.error(ex.message, { metadata: ex.stack });
-    // process.exit(1);
     throw ex;
   });
 
-  // Adding logging transports
+  winston.add(new winston.transports.Console({ colorize: true }));
   winston.add(new winston.transports.File({ filename: "logfile.log" }));
   winston.add(
     new winston.transports.MongoDB({
-      db: "mongodb://localhost:27017/genre_exercises",
+      db: database,
       level: "info",
     })
   );
@@ -42,6 +36,26 @@ module.exports = function (app) {
     dbDebugger("Database debugging....");
   }
 };
+
+// handling uncaught exceptions
+// process.on("uncaughtException", (ex) => {
+//   winston.error(ex.message, { metadata: ex.stack });
+//   process.exit(1);
+// });
+
+// winston.exceptions.handle(
+// new winston.transports.File({ filename: "uncaughtExceptions.log" })
+// new winston.transports.MongoDB({
+//   db: "mongodb://localhost:27017/genre_exercises",
+//   level: "info",
+// })
+// );
+
+// process.on("unhandledRejection", (ex) => {
+// winston.error(ex.message, { metadata: ex.stack });
+// process.exit(1);
+// throw ex;
+// });
 
 // Example for throwing unhandled Rejection
 // const p = Promise.reject(new Error("unhandled rejection"));
