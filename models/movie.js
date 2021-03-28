@@ -9,6 +9,13 @@ const movieSchema = new mongoose.Schema({
   dailyRentalRate: Number,
 });
 
+movieSchema.statics.increaseStock = function (movieId) {
+  return this.findByIdAndUpdate(
+    { _id: movieId },
+    { $inc: { numberInStock: 1 } }
+  );
+};
+
 const Movie = mongoose.model("Movie", movieSchema);
 
 function validateMovie(movie) {

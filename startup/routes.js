@@ -6,12 +6,10 @@ const rentals = require("../routes/rentals");
 const users = require("../routes/users");
 const auth = require("../routes/auth");
 const error = require("../middleWares/error");
+const returns = require("../routes/returns");
 const express = require("express");
 
 module.exports = function (app) {
-  app.use(express.json());
-  app.use(express.urlencoded());
-
   app.use("/", home);
   app.use("/api/genres", genres);
   app.use("/api/customers", customers);
@@ -19,6 +17,7 @@ module.exports = function (app) {
   app.use("/api/rentals", rentals);
   app.use("/api/users", users);
   app.use("/api/auth", auth);
+  app.use("/api/returns", returns);
 
   app.use(error);
 };
